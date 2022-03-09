@@ -30,6 +30,11 @@
 </div>
 <div id="wrap">
 	<header id="header">
+		
+		<!-- toc 목차 관련 1 -->
+		<script src="./images/toc.js"></script>
+		<link rel="stylesheet" href="./images/toc.css">
+		
 		<div class="inner">			
 			<h1>
 				<a href="[##_blog_link_##]">
@@ -161,6 +166,10 @@
 		<div class="content-wrap">
 			<article id="content">
 				[##_revenue_list_upper_##]
+				
+				<!-- toc 목차 관련 2 -->
+				<div class='toc hidden-xs hidden-sm'></div>    
+				
 
 				<s_cover_group>
 					<s_cover_rep>
@@ -784,5 +793,46 @@
 </div>
 </s_t3>
 <script src="./images/script.js"></script>
+
+<!-- toc 목차 관련 3 -->
+<script>
+  var content = document.querySelector('.tt_article_useless_p_margin')
+  var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6, h7')
+  var headingMap = {}
+ 
+  Array.prototype.forEach.call(headings, function (heading) {
+      var id = heading.id ? heading.id : heading.textContent.trim().toLowerCase()
+                 .split(' ').join('-').replace(/[\!\@\#\$\%\^\&\*\(\):]/ig, '')
+      headingMap[id] = !isNaN(headingMap[id]) ? ++headingMap[id] : 0
+      if (headingMap[id]) {
+        heading.id = id + '-' + headingMap[id]
+      } else {
+        heading.id = id
+      }
+    })
+ 
+  tocbot.init({
+    tocSelector: '.toc',
+    contentSelector: '.tt_article_useless_p_margin',
+    headingSelector:'h1, h2, h3',
+    hasInnerContainers: false
+  });
+ 
+  $(document).ready(function(){
+    $('.toc').addClass('toc-absolute');
+ 
+    var toc_top = $('.toc').offset().top - 10;
+    $(window).scroll(function() {
+      if ($(this).scrollTop() >= toc_top) {
+        $('.toc').addClass('toc-fixed');
+        $('.toc').removeClass('toc-absolute');
+      } else {
+        $('.toc').addClass('toc-absolute');
+        $('.toc').removeClass('toc-fixed');
+      }
+    });
+  });
+
+</script>
 </body>
 </html>
